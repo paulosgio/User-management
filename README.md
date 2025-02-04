@@ -57,3 +57,4 @@ export default tseslint.config({
 - json-server
 - tailwindcss
 - react-router-dom
+- typescript
