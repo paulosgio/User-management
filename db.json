@@ -1,0 +1,11 @@
+{
+  "users": [
+    {
+      "id": "f1ed",
+      "username": "Paulo Sérgio",
+      "age": "20",
+      "email": "ngcpaulo1@gmail.com",
+      "isActive": "yes"
+    }
+  ]
+}
