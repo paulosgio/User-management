@@ -1,3 +1,11 @@
 {
-  "users": []
+  "users": [
+    {
+      "id": "dcf4",
+      "username": "sdsa",
+      "age": "",
+      "email": "",
+      "isActive": "yes"
+    }
+  ]
 }

@@ -1,0 +1,74 @@
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { instance } from "../../instance/instance";
+import useUser from "../../context/useUser";
+import { useEffect } from "react";
+
+interface IFormProps {
+    username: string,
+    age: number,
+    isActive: string,
+    email: string,
+    id: string
+  }
+
+export default function UserEdit() {
+    
+    const { id } = useParams< { id: string } >()
+    const { control, register, handleSubmit, formState: { errors }, setValue } = useForm<IFormProps>()
+    const { dispatch } = useUser()
+    const navigate = useNavigate()
+
+    useEffect(()=> {
+        const fetch = async ()=> {
+            const response = await instance.get(`users/${id}`)
+            const user: IFormProps = response.data
+            setValue("username", user.username)
+            setValue("isActive", user.isActive)
+            setValue("email", user.email)
+            setValue("age", user.age)
+        }
+        fetch()
+    }, [])
+
+    const onSubmit = async (newUser: IFormProps)=> {
+        try {
+          const response = await instance.put(`users/${id}`, newUser)
+          dispatch({ type: "EDIT", payload: response.data})
+          navigate("/")
+        } catch (error) {
+          console.log(error);
+        }
+      } 
+
+    return(
+       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
+            <label htmlFor="username">Username</label>
+            <input {...register("username", { required: true })} className="p-1 border-2 border-slate-400 rounded-md outline-none focus:border-slate-500" placeholder="examplejs" type="text" id="username"/>
+              {errors.username && <p className="text-red-600">Username is required</p>}
+            <label htmlFor="username">Age</label>
+            <input {...register("age")} className="p-1 border-2 border-slate-400 rounded-md outline-none focus:border-slate-500" placeholder="20" type="text" id="age"/>
+              {errors.age && <p className="text-red-600">Age is required</p>}
+            <h2>isActive</h2>
+            <Controller
+              name="isActive"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <>
+                  <label htmlFor="username">yes</label>
+                  <input className="border-2 border-slate-400 outline-none hover:border-slate-500 w-fit" checked={field.value === "yes"} onChange={field.onChange} value="yes" type="radio" id="isActive"/>
+                  <label htmlFor="username">no</label>
+                  <input className="2 border-slate-400 outline-none hover:border-slate-500 w-fit" checked={field.value === "no"} onChange={field.onChange} value="no" type="radio" id="isInactive"/>
+                    {errors.isActive && <p className="text-red-600">check some option</p>}
+                </>
+              )}
+            />
+            <label htmlFor="username">Email</label>
+            <input {...register("email")} className="p-1 border-2 border-slate-400 rounded-md outline-none focus:border-slate-500" placeholder="example@example.com" type="email" id="email"/>
+              {errors.email && <p className="text-red-600">email is required</p>}
+              <button type="submit">Editar usuario</button>
+              <Link to="/">Voltar</Link>
+          </form>
+    )
+}
