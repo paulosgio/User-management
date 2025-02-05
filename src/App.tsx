@@ -1,21 +1,76 @@
 import { Controller, useForm } from "react-hook-form"
 import Title from "./Components/Title"
 import { instance } from "./instance/instance"
+import { useEffect, useReducer } from "react"
 
 interface IFormProps {
   username: string,
   age: number,
   isActive: string,
-  email: string
+  email: string,
+  id: string
 }
+
+type Action = 
+  { type: "ADD", payload: IFormProps } |
+  { type: "EDIT", payload: IFormProps } |
+  { type: "DELETE", payload: IFormProps } |
+  { type: "GET", payload: IFormProps[] }
+
+type State = IFormProps[]
+
+function reducer(state: State, action: Action): IFormProps[] {
+  switch (action.type) {
+    case "ADD":
+      return [...state, action.payload]
+    case "EDIT":
+      return state.map(user => user.id === action.payload.id ? action.payload : user)
+    case "DELETE":
+      return state.filter(user => user.id !== action.payload.id)
+    case "GET":
+      return action.payload
+    default:
+      return state
+  }
+}
+
+const initialState: IFormProps[] = []
 
 function App() {
 
   const { control, register, handleSubmit, formState: { errors } } = useForm<IFormProps>()
 
   const onSubmit = async (data: IFormProps)=> {
-    instance.post("users", data)
+    try {
+      const response = await instance.post("users", data)
+      { dispatch({type: "ADD", payload: response.data}) }
+    } catch (error) {
+      console.log(error);
+    }
   }
+
+  const deleteUser = async (id: string)=> {
+    try {
+        await instance.delete(`users/${id}`)
+        dispatch({ type: "DELETE", payload: { id } as IFormProps })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(()=> {
+    const fetchUsers = async ()=> {
+      try {
+        const response = await instance.get("users")
+        dispatch({ type: "GET", payload: response.data })
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchUsers()
+  }, [])
 
   return (
     <>
@@ -50,7 +105,19 @@ function App() {
               <button type="submit">Adicionar usuario</button>
           </form>
         </div>
-        <div></div>
+        <div>
+          {state.map((user)=> {
+            return(
+              <>
+                <h1>{user.username}</h1>
+                <p>{user.isActive}</p>
+                <p>{user.email}</p>
+                <p>{user.age}</p>
+                <button onClick={()=> deleteUser(user.id)}>Excluir</button>
+              </>
+            )
+          })}
+        </div>
       </div>
     </>
   )
