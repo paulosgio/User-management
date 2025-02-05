@@ -3,6 +3,7 @@ import Title from "../../Components/Title"
 import { instance } from "../../instance/instance"
 import { useEffect, useReducer } from "react"
 import { Link } from "react-router-dom"
+import useUser from "../../context/useUser"
 
 interface IFormProps {
   username: string,
@@ -12,34 +13,10 @@ interface IFormProps {
   id: string
 }
 
-type Action = 
-  { type: "ADD", payload: IFormProps } |
-  { type: "EDIT", payload: IFormProps } |
-  { type: "DELETE", payload: IFormProps } |
-  { type: "GET", payload: IFormProps[] }
-
-type State = IFormProps[]
-
-function reducer(state: State, action: Action): IFormProps[] {
-  switch (action.type) {
-    case "ADD":
-      return [...state, action.payload]
-    case "EDIT":
-      return state.map(user => user.id === action.payload.id ? action.payload : user)
-    case "DELETE":
-      return state.filter(user => user.id !== action.payload.id)
-    case "GET":
-      return action.payload
-    default:
-      return state
-  }
-}
-
-const initialState: State = []
-
 function Home() {
 
   const { control, register, handleSubmit, formState: { errors } } = useForm<IFormProps>()
+  const { dispatch, state } = useUser()
 
   const onSubmit = async (data: IFormProps)=> {
     try {
@@ -58,8 +35,6 @@ function Home() {
       console.log(error);
     }
   }
-
-  const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(()=> {
     const fetchUsers = async ()=> {
