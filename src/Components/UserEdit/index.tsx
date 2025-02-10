@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { instance } from "../../instance/instance";
 import useUser from "../../context/useUser";
 import { useEffect } from "react";
+import { IOSSwitch } from "../Home/components/Form/switch";
 
 interface IFormProps {
     username: string,
@@ -51,19 +52,17 @@ export default function UserEdit() {
               {errors.age && <p className="text-red-600">Age is required</p>}
             <h2>isActive</h2>
             <Controller
-              name="isActive"
               control={control}
+              name="isActive"
               rules={{ required: true }}
-              render={({ field }) => (
-                <>
-                  <label htmlFor="username">yes</label>
-                  <input className="border-2 border-slate-400 outline-none hover:border-slate-500 w-fit" checked={field.value === "yes"} onChange={field.onChange} value="yes" type="radio" id="isActive"/>
-                  <label htmlFor="username">no</label>
-                  <input className="2 border-slate-400 outline-none hover:border-slate-500 w-fit" checked={field.value === "no"} onChange={field.onChange} value="no" type="radio" id="isInactive"/>
-                    {errors.isActive && <p className="text-red-600">check some option</p>}
-                </>
+              defaultValue="false"
+              render={({ field })=> (
+                <IOSSwitch
+                  checked={field.value === "true"}
+                  onChange={(ev)=> field.onChange(ev.target.checked ? "true" : "false")}
+                />
               )}
-            />
+            />  
             <label htmlFor="username">Email</label>
             <input {...register("email")} className="p-1 border-2 border-slate-400 rounded-md outline-none focus:border-slate-500" placeholder="example@example.com" type="email" id="email"/>
               {errors.email && <p className="text-red-600">email is required</p>}

@@ -1,18 +1,3 @@
 {
-  "users": [
-    {
-      "id": "28b4",
-      "username": "Paulo Sérgio",
-      "age": "123",
-      "email": "ngcpaulo1@gmail.com",
-      "isActive": "no"
-    },
-    {
-      "id": "57d9",
-      "username": "",
-      "age": "20",
-      "email": "ngcpaulo1@gmail.com",
-      "isActive": "yes"
-    }
-  ]
+  "users": []
 }

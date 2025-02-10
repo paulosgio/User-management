@@ -55,16 +55,20 @@ function Home() {
         <div>
           {state.map((user)=> {
             return(
-              <>
-                <h1>{user.username}</h1>
-                <p>{user.isActive}</p>
-                <p>{user.email}</p>
-                <p>{user.age}</p>
-                <button onClick={()=> deleteUser(user.id)}>Excluir</button>
-                <Link to={`user/${user.id}`}>
+              <ul key={user.id}>
+                <li>{user.username}</li>
+                <li>{user.isActive === "true" ? "Active" : "Inactive"}</li>
+                <li>{user.email}</li>
+                <li>{user.age}</li>
+                <li>
+                  <button onClick={()=> deleteUser(user.id)}>Excluir</button>
+                </li>
+                <li>
+                  <Link to={`user/${user.id}`}>
                     <button>Editar</button>
-                </Link>
-              </>
+                  </Link>
+                </li>
+              </ul>
             )
           })}
         </div>

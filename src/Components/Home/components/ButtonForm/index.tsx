@@ -1,17 +1,12 @@
-import React from "react";
 import { IoPersonAddOutline } from "react-icons/io5";
 
 interface IButtonProp {
-    children: React.ReactNode,
-    type?: "submit" | "button" | "reset",
-    onClick?: ()=> {}
+    type: "submit" | "button" | "reset",
 }
 
-
-export default function ButtonForm({ children, type }: IButtonProp) {
+export default function ButtonForm({ type }: IButtonProp) {
     return (
-        <button className="flex items-center gap-4 bg-slate-700 w-fit px-2 py-3 rounded-2xl text-white" type={type}>
-            {children}
+        <button className="flex justify-center items-center bg-slate-700 w-[3rem] h-[3rem] px-2 py-3 rounded-full text-white cursor-pointer duration-300 hover:scale-90" type={type}>
             <IoPersonAddOutline/>
         </button>
     )
