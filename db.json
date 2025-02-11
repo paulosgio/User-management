@@ -1,3 +1,46 @@
 {
-  "users": []
+  "users": [
+    {
+      "username": "Victor",
+      "age": "20",
+      "email": "ngcpaulo1@gmail.com.br",
+      "isActive": "false",
+      "id": "96ba"
+    },
+    {
+      "id": "fb4c",
+      "username": "Victor",
+      "age": "20",
+      "email": "ngcpaulo1@gmail.com",
+      "isActive": "true"
+    },
+    {
+      "id": "98e9",
+      "username": "Paulo Sérgio",
+      "age": "24",
+      "email": "ngcpaulo1@gmail.com",
+      "isActive": "false"
+    },
+    {
+      "id": "d98a",
+      "username": "Pedro Reis",
+      "age": "21",
+      "email": "pedro@gmail.com",
+      "isActive": "true"
+    },
+    {
+      "id": "1309",
+      "username": "Paulo Sérgio",
+      "age": "20",
+      "email": "ngcpaulo1@gmail.com",
+      "isActive": "true"
+    },
+    {
+      "id": "f02a",
+      "username": "Paulo Sérgio",
+      "age": "123",
+      "email": "ngcpaulo1@gmail.com",
+      "isActive": "true"
+    }
+  ]
 }

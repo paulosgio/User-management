@@ -16,13 +16,13 @@ type Action =
     { type: "ADD", payload: IFormProps } |
     { type: "EDIT", payload: IFormProps } |
     { type: "DELETE", payload: IFormProps } |
-    { type: "GET", payload: IFormProps[] }
+    { type: "GET", payload: IFormProps[] } 
   
 type State = IFormProps[]
 
 type UserContextType = {
     state: State,
-    dispatch: React.Dispatch<Action>
+    dispatch: React.Dispatch<Action>,
 }
 
 function reducer(state: State, action: Action): IFormProps[] {
