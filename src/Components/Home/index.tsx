@@ -1,4 +1,3 @@
-import { instance } from "../../instance/instance"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import useUser from "../../context/useUser"
@@ -18,8 +17,14 @@ function Home() {
 
   const onSubmit = async (data: IFormProps) => {
     try {
-      const response = await instance.post("users", data)
-      dispatch({ type: "ADD", payload: response.data })
+      // Simulando uma chamada ao JSON Server (substitua com a API real quando disponível)
+      const newUser = { ...data, id: String(Date.now()) }
+      
+      // Adiciona o novo usuário no state e localStorage
+      const updatedUsers = [...state, newUser]
+      localStorage.setItem('users', JSON.stringify(updatedUsers))
+
+      dispatch({ type: "ADD", payload: newUser })
     } catch (error) {
       console.log(error)
     }
@@ -27,7 +32,10 @@ function Home() {
 
   const deleteUser = async (id: string) => {
     try {
-      await instance.delete(`users/${id}`)
+      // Remove o usuário do state e localStorage
+      const updatedUsers = state.filter(user => user.id !== id)
+      localStorage.setItem('users', JSON.stringify(updatedUsers))
+
       dispatch({ type: "DELETE", payload: { id } as IFormProps })
     } catch (error) {
       console.log(error)
@@ -35,16 +43,19 @@ function Home() {
   }
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchUsers = () => {
       try {
-        const response = await instance.get("users")
-        dispatch({ type: "GET", payload: response.data })
+        // Carrega os usuários do localStorage
+        const savedUsers = localStorage.getItem('users')
+        if (savedUsers) {
+          dispatch({ type: "GET", payload: JSON.parse(savedUsers) })
+        }
       } catch (error) {
         console.log(error)
       }
     }
     fetchUsers()
-  }, [])
+  }, [dispatch])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
@@ -54,13 +65,12 @@ function Home() {
     if (searchTerm === "") {
       return true
     } else {
-      return(
+      return (
         user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.email.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
-  }
-  )
+  })
 
   return (
     <>
